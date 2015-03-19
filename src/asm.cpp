@@ -246,6 +246,10 @@ int main(int argc, char **argv) {
   symbolValues["gte"] = 0x4F;
   symbolValues["lte"] = 0x51;
 
+  // Control flow operations
+  symbolValues["jmp"] = 0x61;
+  symbolValues["jmpz"] = 0x63;
+
   // Built in operations
   symbolValues["malloc"] = 0xA1;
   symbolValues["free"] = 0xA3;

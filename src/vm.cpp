@@ -45,6 +45,10 @@ enum Command {
   CMD_GTE = 0x4F,
   CMD_LTE = 0x51,
 
+  // Control flow operations
+  CMD_JMP = 0x61,
+  CMD_JMPZ = 0x63,
+
   // Built in operations
   CMD_MALLOC = 0xA1,
   CMD_FREE = 0xA3,
@@ -213,6 +217,18 @@ void run(char *buf, int64_t size) {
       case CMD_LTE: {
         BIN_OPS(v1, v2);
         es.push(v1 <= v2);
+      } break;
+
+        // Control flow operations
+      case CMD_JMP: {
+        ip = es.top();
+        es.pop();
+      } break;
+      case CMD_JMPZ: {
+        BIN_OPS(v1, v2);
+        if (v1) {
+          ip = v2;
+        }
       } break;
 
         // Built in operations
