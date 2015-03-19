@@ -1,0 +1,6 @@
+        push(1)
+        push(1)
+        add
+        write
+		push(0)
+		exit
