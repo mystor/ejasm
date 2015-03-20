@@ -6,6 +6,8 @@ enum Command {
   CMD_LOAD = 0x1,
   CMD_STORE = 0x3,
   CMD_EXIT = 0x5,
+  CMD_LOADBYTE = 0x7,
+  CMD_STOREBYTE = 0x9,
 
   // Basic Math!
   CMD_ADD = 0x11,
@@ -88,14 +90,27 @@ void run(char *buf, int64_t size) {
       // Non-push
       switch (inst) {
       case CMD_LOAD: {
-        es.push(loadWord(buf, size, es.top()));
+        int64_t ptr = es.top();
         es.pop();
+        es.push(loadWord(buf, size, ptr));
       } break;
       case CMD_STORE: {
         int64_t v = es.top();
         es.pop();
         storeWord(buf, size, es.top(), v);
         es.pop();
+      } break;
+      case CMD_LOADBYTE: {
+        int64_t ptr = es.top();
+        es.pop();
+        es.push(*getPtr(buf, size, ptr));
+      } break;
+      case CMD_STOREBYTE: {
+        int8_t v = es.top(); // Cast to a char
+        es.pop();
+        *getPtr(buf, size, es.top()) = v; // Store it
+        es.pop();
+
       } break;
       case CMD_EXIT: {
         exit(es.top()); // es.pop() is unnecessary
@@ -244,13 +259,12 @@ void run(char *buf, int64_t size) {
         free((void *)(v - size));
       } break;
       case CMD_WRITE: {
-        std::cout << es.top() << std::endl;
-        es.pop();
+        BIN_OPS(length, ptr);
+        std::cout.write(getPtr(buf, size, ptr), length);
       } break;
       case CMD_READ: {
-        int64_t v;
-        std::cin >> v;
-        es.push(v);
+        BIN_OPS(length, ptr);
+        std::cin.read(getPtr(buf, size, ptr), length);
       } break;
       default: {
         std::cerr << "ERROR: Unrecognized Command " << inst << "\n";

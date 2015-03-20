@@ -207,6 +207,8 @@ int main(int argc, char **argv) {
   symbolValues["load"] = 0x1;
   symbolValues["store"] = 0x3;
   symbolValues["exit"] = 0x5;
+  symbolValues["loadbyte"] = 0x7;
+  symbolValues["storebyte"] = 0x9;
 
   // Basic Math!
   symbolValues["add"] = 0x11;

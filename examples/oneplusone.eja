@@ -1,6 +1,11 @@
+        push(randomint)
         push(1)
         push(1)
         add
+        store
+        push(randomint)
+        push(1)
         write
-		push(0)
-		exit
+        push(0)
+        exit
+randomint: 0
