@@ -56,6 +56,7 @@ enum Command {
   CMD_FREE = 0xA3,
   CMD_WRITE = 0xA5,
   CMD_READ = 0xA7,
+  CMD_MEMCPY = 0xA9,
 };
 
 std::stack<uint64_t> es;
@@ -85,7 +86,8 @@ void run(char *buf, int64_t size) {
     int64_t inst = loadWord(buf, size, ip);
     ip+=sizeof(int64_t);
 
-#define BIN_OPS(a, b) int64_t a = es.top(); es.pop(); int64_t b = es.top(); es.pop()
+#define ARG(a) int64_t a = es.top(); es.pop()
+#define BIN_OPS(a, b) ARG(a); ARG(b)
     if (inst & 0x1) {
       // Non-push
       switch (inst) {
@@ -265,6 +267,10 @@ void run(char *buf, int64_t size) {
       case CMD_READ: {
         BIN_OPS(length, ptr);
         std::cin.read(getPtr(buf, size, ptr), length);
+      } break;
+      case CMD_MEMCPY: {
+        ARG(n); ARG(src); ARG(dest);
+        memcpy(getPtr(buf, size, dest), getPtr(buf, size, src), n);
       } break;
       default: {
         std::cerr << "ERROR: Unrecognized Command " << inst << "\n";

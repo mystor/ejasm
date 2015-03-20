@@ -257,6 +257,7 @@ int main(int argc, char **argv) {
   symbolValues["free"] = 0xA3;
   symbolValues["write"] = 0xA5;
   symbolValues["read"] = 0xA7;
+  symbolValues["memcpy"] = 0xA9;
 
 
   PState ps(*is);
