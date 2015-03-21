@@ -199,6 +199,10 @@ int main(int argc, char **argv) {
   std::unordered_map< std::string, int64_t > symbolValues;
   std::unordered_map< std::string, std::vector< int64_t > > targets;
 
+#define COMMAND(k, v) symbolValues[#k] = v;
+#include "cmds.h"
+
+#if 0
   // Push is a special operation, as it is the only operation which contains
   // a payload. It contains the value which it is pushing in its upper 63 bits, and
   // has it's lowest bit unset. All other operations MUST have their lowest bit set
@@ -258,6 +262,7 @@ int main(int argc, char **argv) {
   symbolValues["write"] = 0xA5;
   symbolValues["read"] = 0xA7;
   symbolValues["memcpy"] = 0xA9;
+#endif
 
 
   PState ps(*is);
